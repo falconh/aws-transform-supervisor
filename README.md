@@ -69,6 +69,11 @@ These are deliberate. Each is recorded in [`docs/adr/`](docs/adr/).
 - **Local mode, one application.** Fleet migrations are out of scope
   ([ADR 0007](docs/adr/0007-local-mode-single-application.md)).
 
+Those three are **optional companions, not dependencies** — this plugin declares none and
+installs nothing transitively. `aws-core` makes the fleet handoff reach AWS's skill directly
+rather than just naming it; everything else works without any of them
+([ADR 0009](docs/adr/0009-no-plugin-dependencies.md)).
+
 ## Requirements
 
 - macOS or Linux (native Windows unsupported — use WSL)
