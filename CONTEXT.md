@@ -1,4 +1,4 @@
-# AWS Transform Supervisor
+# Application Transform Manager
 
 Supervises a single AWS Transform (`atx`) migration of one application: publishes a
 Recipe the team owns, watches the Attempt, intervenes only in two sanctioned ways,

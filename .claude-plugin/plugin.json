@@ -1,12 +1,12 @@
 {
-  "name": "aws-transform-supervisor",
+  "name": "application-transform-manager",
   "description": "Run an AWS Transform (atx) migration under supervision: publish a recipe you own, watch the run, intervene only to resume or nudge, and turn ATX's unmet exit criteria into a written remediation plan.",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "author": {
     "name": "falconh"
   },
-  "homepage": "https://github.com/falconh/aws-transform-supervisor",
-  "repository": "https://github.com/falconh/aws-transform-supervisor",
+  "homepage": "https://github.com/falconh/application-transform-manager",
+  "repository": "https://github.com/falconh/application-transform-manager",
   "license": "MIT",
   "keywords": [
     "aws-transform",

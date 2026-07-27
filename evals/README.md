@@ -39,7 +39,7 @@ Real use has all three: the user is inside the repo, mid-conversation, having al
 believes it can handle directly, which is exactly how an isolated one-line question reads.
 
 So treat 17% as a floor, not an estimate. The practical consequence: **these skills may need
-naming explicitly** (`/aws-transform-supervisor:run-migration`) rather than being discovered.
+naming explicitly** (`/application-transform-manager:run-migration`) rather than being discovered.
 That is a real limitation, and it is the honest reading — four attempted rewrites failed to
 move it, which is evidence the cause is not description wording.
 

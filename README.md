@@ -1,4 +1,4 @@
-# aws-transform-supervisor
+# application-transform-manager
 
 Run an AWS Transform (`atx`) migration **under supervision**: publish a Recipe you own, watch
 the run, intervene only to resume or nudge it, and turn the criteria it could not meet into a
@@ -96,17 +96,20 @@ AWS's opt-out documentation:
 
 ## Status
 
-**0.1.0 — unreleased and unverified against a live `atx` installation.** The design is built
+**0.2.0 — unreleased and unverified against a live `atx` installation.** The design is built
 on AWS's published documentation and its shipped agent skill; the procedures have not yet
 been exercised end to end against a real transformation. Treat the first run as a test of
 this plugin as much as of your Recipe.
+
+Renamed from `aws-transform-supervisor` in 0.2.0, before any release was published or
+installed — hence a clean break rather than a compatibility problem.
 
 **Known limitation — these skills under-trigger.** Measured trigger accuracy is 100% precision
 (they never fire on the wrong request, across 20 hard near-miss queries) but only 8–17% recall
 in isolation. Four attempted description rewrites all scored worse, so the cause is not
 wording. Until that improves, name the skill explicitly
-(`/aws-transform-supervisor:run-migration`) rather than relying on discovery. Method, numbers
-and the full argument are in [`evals/README.md`](evals/README.md).
+(`/application-transform-manager:run-migration`) rather than relying on discovery. Method,
+numbers and the full argument are in [`evals/README.md`](evals/README.md).
 
 ## Vocabulary
 
