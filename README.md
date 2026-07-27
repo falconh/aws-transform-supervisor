@@ -83,6 +83,13 @@ on AWS's published documentation and its shipped agent skill; the procedures hav
 been exercised end to end against a real transformation. Treat the first run as a test of
 this plugin as much as of your Recipe.
 
+**Known limitation — these skills under-trigger.** Measured trigger accuracy is 100% precision
+(they never fire on the wrong request, across 20 hard near-miss queries) but only 8–17% recall
+in isolation. Four attempted description rewrites all scored worse, so the cause is not
+wording. Until that improves, name the skill explicitly
+(`/aws-transform-supervisor:run-migration`) rather than relying on discovery. Method, numbers
+and the full argument are in [`evals/README.md`](evals/README.md).
+
 ## Vocabulary
 
 [`CONTEXT.md`](CONTEXT.md) is the glossary — Recipe, Attempt, Base Commit, Nudge, Leftover.
