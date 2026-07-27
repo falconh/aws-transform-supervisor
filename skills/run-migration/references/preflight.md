@@ -65,8 +65,8 @@ script.
 
 ## 5. Derive the current flags
 
-**Do not hardcode flags from memory or from this document.** ATX ships frequently and its
-interface moves. Read the current truth off the machine:
+**Read the current flags off the machine**, treating `--help` as the source of truth over
+memory or this document. ATX ships frequently and its interface moves:
 
 ```bash
 atx custom def exec --help

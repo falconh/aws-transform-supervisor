@@ -10,9 +10,11 @@ that can read a `SKILL.md` and run a shell command.
 
 Nothing here can be unit-tested; correctness rests on how the instructions are written. The
 mitigation is the technique AWS documents for authoring Transformation Definitions, applied
-to our own skill text: mark must-follow rules with a literal `CRITICAL:` prefix and give
-exact command strings rather than describing them, which measurably reduces variability.
+to our own skill text: give exact command strings rather than describing them, and state each
+rule positively so the behaviour we want is the one named.
 
-The five traps in `run-migration/references/monitor.md` exist because they are precisely the
-mistakes a model re-derives under pressure — trusting a "complete" log line, trusting a stale
-exit file, or finding the wrong Conversation by modification time.
+The guardrails at the top of `run-migration/SKILL.md` carry the load. They exist because each
+defends against a signal that looks authoritative and is not — a "complete" log line, a stale
+exit file, the newest directory by modification time — and those are precisely the mistakes a
+model re-derives under pressure. They live in one place so that changing a rule is a
+one-place edit; the reference files point at them by number rather than restating them.

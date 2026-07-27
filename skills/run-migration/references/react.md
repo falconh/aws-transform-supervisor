@@ -59,22 +59,10 @@ git -C "$ATX_WORK/repo" checkout -b "atx/attempt-<N+1>" "$(cat "$ATX_WORK/base-c
 Then relaunch as in [monitor.md](monitor.md), adding:
 
 ```bash
--g 'additionalPlanContext=<guidance without any commas>'
+-g 'additionalPlanContext=<comma-free guidance>'
 ```
-
-> **CRITICAL: No commas in `additionalPlanContext`.** They break the CLI parser. Rephrase.
 
 Because a Nudge is billable and re-runs from scratch, say so plainly before starting one.
 
-**Cap it at two Nudges.** If a third looks warranted, the problem is the Recipe, not the
-context — stop, and report that the Recipe needs revision through `author-recipe`. This
-plugin does not edit Recipes (ADR 0002).
-
-## Never
-
-- **Never kill a running Attempt.** No pathology detection, no timeout-based termination.
-  If a run looks stuck, report what the logs show and let the user decide.
-- **Never edit the Recipe.** Refinement is ATX's job (ADR 0002).
-- **Never reset, rebase or delete an Attempt branch.** They are the evidence.
-- **Never retry an environmental failure by nudging.** It burns Agent Minutes on a
-  guaranteed repeat.
+**Cap it at two Nudges.** If a third looks warranted, the problem is the Recipe rather than
+the context — stop, and report that the Recipe needs revision through `author-recipe`.

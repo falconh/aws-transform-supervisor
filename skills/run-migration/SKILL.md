@@ -1,15 +1,12 @@
 ---
 name: run-migration
 description: >-
-  Use when running an AWS Transform (atx) code migration or upgrade on an application and you want
-  the run supervised rather than fired and forgotten: launching a transformation non-interactively,
-  watching a long-running atx job, reacting when it exhausts its Agent Minutes budget or fails, and
-  turning the criteria it could not meet into a written remediation plan. Triggers on "run the
-  transformation", "migrate this app with AWS Transform", "atx is still running", "what did the
-  transformation not finish", or any request to monitor, resume, or report on an atx run. Not for
-  authoring the Recipe itself (use author-recipe), not for bulk/remote fleet migrations across many
-  repositories (use AWS's own aws-transform skill), and not for AWS Transform's managed console
-  workflows like mainframe or VMware migration.
+  Supervise an AWS Transform (`atx`) migration run: launch it non-interactively, monitor a
+  long-running job, resume it when Agent Minutes run out, and turn the exit criteria it could not
+  meet into a remediation plan. Use when the user wants to run, migrate, monitor, resume, or report
+  on an atx transformation of an application. Not for authoring the Recipe (use author-recipe), not
+  for fleet or remote migrations across many repositories (use AWS's own aws-transform skill), and
+  not for AWS Transform's managed console workflows such as mainframe or VMware migration.
 ---
 
 # Run a supervised AWS Transform migration
@@ -17,62 +14,69 @@ description: >-
 Drives one `atx` transformation of one application, watches it, intervenes in exactly two
 sanctioned ways, and writes a remediation plan for whatever it could not finish.
 
-Read `../../CONTEXT.md` for the vocabulary used throughout (Recipe, Attempt, Base Commit,
-Leftover, Nudge). Paths below are relative to this skill's own directory.
+`../../CONTEXT.md` holds the vocabulary — Recipe, Attempt, Base Commit, Nudge, Leftover.
+Paths below are relative to this skill's own directory.
 
-## The loop
+## Guardrails
 
-1. **Preflight** — verify tooling, credentials, permissions and runtime, and derive the
-   current CLI flags. See [references/preflight.md](references/preflight.md).
-2. **Confirm the Recipe** — it must already be published and must declare Exit Criteria. If
-   it does not exist yet, stop and use the `author-recipe` skill first.
-3. **Prepare the Disposable Clone** — clone the Target to scratch, record the Base Commit,
-   create the branch for Attempt 1. See [references/monitor.md](references/monitor.md).
-4. **Launch and monitor** — start the Attempt in the background, capture its Conversation id
-   and pid, then poll. See [references/monitor.md](references/monitor.md).
-5. **React** — on exit, read the exit code and decide between accept, resume and nudge.
-   Only those. See [references/react.md](references/react.md).
-6. **Report** — read the validation summary, write `LEFTOVERS.md`, present the result.
-   See [references/leftovers.md](references/leftovers.md).
+These hold at every step. Each defends against a signal that looks authoritative and is not.
 
-## Non-negotiable rules
+1. **The process is the only witness.** Completion is process exit, checked with
+   `kill -0 <pid>`. ATX prints `TRANSFORMATION COMPLETE` and then keeps working — validation
+   summary generation still follows — and a stale `.exit` file can survive from an earlier
+   run. Both of those lie. The process does not.
+2. **The Conversation id comes from stdout**, off the `Conversation log:` line. Modification
+   time picks the wrong run: `ls -t` returns a previous Attempt's directory, and every
+   conclusion drawn afterwards describes the wrong run.
+3. **Relay signal, skip spinner frames.** Surface planning, file changes, build results and
+   errors. `Thinking` lines repeat dozens of times.
+4. **Write `additionalPlanContext` as comma-free prose.** Commas break the CLI parser.
 
-These are the mistakes that get re-derived under pressure. The full form of each, with exact
-commands, is in [references/monitor.md](references/monitor.md).
+## Steps
 
-1. **CRITICAL: Completion is process exit, never log text.** ATX prints
-   `TRANSFORMATION COMPLETE` and then keeps working — it still has validation summary
-   generation to do. Never treat any log line as completion.
-2. **CRITICAL: `kill -0 <pid>` is the only liveness check.** An exit-code file may be stale
-   from a previous run. Never conclude a run finished because that file exists.
-3. **CRITICAL: Get the Conversation id from the `Conversation log:` line in stdout.** Never
-   locate it by modification time — `ls -t` will happily hand you a previous run's directory.
-4. **CRITICAL: Never echo `Thinking` lines.** They are spinner frames and repeat dozens of
-   times. Relay everything else.
-5. **CRITICAL: No commas anywhere in `additionalPlanContext`.** They break the CLI parser.
-   Rephrase to avoid them.
+Each step ends on its completion criterion. Move on only once it holds.
 
-## What this skill will not do
+1. **Preflight** — [references/preflight.md](references/preflight.md).
+   *Done when:* every check passes and the flag table has been reconciled against
+   `atx custom def exec --help`.
 
-Bounded on purpose — see `../../docs/adr/`.
+2. **Confirm the Recipe.** It must be published and declare Exit Criteria. If none exists,
+   stop and hand off to `author-recipe`.
+   *Done when:* the Recipe appears in `atx custom def list --json` and its Exit Criteria have
+   been read — they bound everything the Leftover report can say.
 
-- **Never edits the Recipe.** Refinement belongs to ATX's Continual Learning (ADR 0002).
-- **Never kills a running Attempt.** Only the user does that.
-- **Never resets or discards an Attempt branch.** Attempts are siblings off the Base
-  Commit (ADR 0006).
-- **Never runs in the user's working copy.** Every Attempt runs in a Disposable Clone
-  (ADR 0005).
-- **Never independently re-verifies ATX's work.** The validation summary is the verdict
+3. **Prepare the Disposable Clone** — [references/monitor.md](references/monitor.md).
+   *Done when:* the clone exists in scratch space, the Base Commit is written to a file, and
+   the Attempt branch is checked out.
+
+4. **Launch and monitor** — [references/monitor.md](references/monitor.md).
+   *Done when:* `kill -0` reports the process gone and its exit code has been read
+   (guardrail 1).
+
+5. **React** — [references/react.md](references/react.md).
+   *Done when:* the outcome is accept, resume or nudge. For anything else, report and stop.
+
+6. **Report** — [references/leftovers.md](references/leftovers.md).
+   *Done when:* `LEFTOVERS.md` exists and **every** unmet Exit Criterion in it carries a
+   concrete remediation naming the change to make.
+
+## Boundaries
+
+Deliberate, each recorded in `../../docs/adr/`.
+
+- Recipe refinement belongs to ATX's Continual Learning (ADR 0002).
+- Stopping a run is the user's call — report what the logs show and let them decide.
+- Attempt branches are evidence; each persists on its own branch off the Base Commit
+  (ADR 0006).
+- Every Attempt runs in a Disposable Clone (ADR 0005).
+- ATX's validation summary is the verdict; this skill reports it rather than re-auditing it
   (ADR 0003).
 
-## Cost and consent
+## Cost
 
-`atx` bills **Agent Minutes**, and a Nudge starts a fresh Conversation that bills from zero
-rather than continuing an existing one. Before launching the first Attempt, tell the user
-what is about to run and roughly what it will touch. Before any Nudge, say plainly that it
-is a new billable run. Never quote prices — point at
-<https://aws.amazon.com/transform/pricing/>.
+`atx` bills **Agent Minutes**. A resume continues an existing Conversation; a Nudge starts a
+fresh one and bills from zero. Say which is about to happen before it happens, and point at
+<https://aws.amazon.com/transform/pricing/> rather than quoting prices.
 
-Consider setting a ceiling with `--limit <agent-minutes>` on the first Attempt of an
-unfamiliar Recipe. Hitting the ceiling ends the Conversation cleanly and is resumable, which
-is a much better failure mode than an open-ended run.
+Cap an unfamiliar Recipe with `--limit <agent-minutes>`. Reaching the ceiling ends the
+Conversation cleanly and resumably, which beats an open-ended run.

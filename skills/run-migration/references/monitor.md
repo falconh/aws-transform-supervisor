@@ -61,11 +61,7 @@ Conversation log: /Users/<user>/.aws/atx/custom/20260319_063712_e3479843/logs/20
 
 If it has not appeared, wait 15 seconds and retry, up to four times. Extract both the full
 log path and the Conversation id (`20260319_063712_e3479843`). Save the id — every artifact
-is addressed by it — and report it to the user immediately.
-
-> **CRITICAL: Get the Conversation id from that stdout line.** Never find it by
-> modification time. `ls -t ~/.aws/atx/custom/ | head -1` will return a previous run's
-> directory and every downstream conclusion will be about the wrong Attempt.
+is addressed by it — and report it to the user immediately (guardrail 2).
 
 ## 4. Poll
 
@@ -75,9 +71,8 @@ Every 60 seconds, fixed interval — no backoff:
 kill -0 "$(cat "$ATX_WORK/attempt-N.pid")" 2>/dev/null && echo RUNNING || echo DONE
 ```
 
-While `RUNNING`, read new lines from the Conversation log and relay meaningful progress —
-planning, files changed, build results, errors. Keep polling without waiting for user input;
-the user should see continuous progress.
+While `RUNNING`, read new lines from the Conversation log and relay progress (guardrail 3).
+Keep polling without waiting for user input; the user should see continuous progress.
 
 Additional detail when a run looks stuck, spawned by ATX's own subagents:
 
@@ -88,19 +83,9 @@ Additional detail when a run looks stuck, spawned by ATX's own subagents:
 For CLI-level faults rather than transformation faults: `~/.aws/atx/logs/debug*.log` and
 `~/.aws/atx/logs/error.log`.
 
-> **CRITICAL: `kill -0` is the only liveness check.** A stale `attempt-N.exit` can survive
-> from an earlier run. Its existence proves nothing.
-
-> **CRITICAL: Never echo `Thinking` lines.** They are spinner frames, repeated dozens of
-> times. Surface everything else.
-
 ## 5. Decide it is finished
 
-> **CRITICAL: Completion is process exit, and nothing else.** ATX prints
-> `TRANSFORMATION COMPLETE` and then continues working — validation summary generation still
-> follows. Treating that line as the end reads the summary before it is written.
-
-Only once `kill -0` reports `DONE`:
+Only once `kill -0` reports `DONE` (guardrail 1):
 
 ```bash
 cat "$ATX_WORK/attempt-N.exit"
@@ -108,9 +93,8 @@ cat "$ATX_WORK/attempt-N.exit"
 
 `0` is success. Non-zero is failure. Now go to [react.md](react.md).
 
-## 6. One more parser trap
+## 6. Shell quoting
 
-> **CRITICAL: No commas in `additionalPlanContext`.** They break the CLI parser. Rephrase
-> rather than escaping. When building any `atx` command, quote JSON and configuration values
-> with single quotes, never nest double quotes inside double quotes, and check the quoting
-> balances before running it.
+Quote JSON and configuration values with single quotes, keep double quotes unnested, and
+check that quoting balances before running any `atx` command — unbalanced quotes hang the
+shell waiting for a terminator.

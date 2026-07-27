@@ -1,14 +1,12 @@
 ---
 name: author-recipe
 description: >-
-  Use when creating, testing or publishing a custom AWS Transform Recipe (a Transformation
-  Definition) for a migration that AWS's built-in transformations do not cover — for example a
-  framework migration, an in-house API or logging swap, a language port, or an org-specific upgrade
-  pattern. Triggers on "write a transformation definition", "create a custom atx transformation",
-  "publish the recipe", "AWS Transform doesn't have one for this", or asking how to express a
-  migration so atx can execute it. Also use when a migration keeps leaving the same work unfinished
-  and the Recipe itself needs revising. Not for running a migration (use run-migration), and not for
-  customising an AWS-managed transformation — those cannot be modified.
+  Author a custom AWS Transform Recipe — a Transformation Definition — for a migration AWS's
+  built-in transformations do not cover: write it, declare its exit criteria, test it as a draft,
+  and publish it to the registry. Use when the user wants to create, revise, test or publish an atx
+  transformation definition, or when no built-in transformation fits a framework migration, API or
+  logging swap, language port, or org-specific upgrade. Not for running a migration (use
+  run-migration); AWS-managed transformations cannot be modified.
 ---
 
 # Author a Recipe
@@ -40,7 +38,7 @@ the Recipe are the **entire** quality mechanism. ATX validates against them and 
 went unmet, and that report is the whole Leftover story. A vague Recipe produces a useless
 report.
 
-**Do not publish a Recipe without concrete, checkable Exit Criteria.** See
+**Publish only a Recipe whose Exit Criteria are concrete and checkable.** See
 [references/exit-criteria.md](references/exit-criteria.md).
 
 ## Structure

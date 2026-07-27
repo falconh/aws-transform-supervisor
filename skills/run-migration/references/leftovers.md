@@ -5,7 +5,8 @@ unmet criterion into a Leftover with a proposed remediation, and writes it down.
 
 ## 1. Read the validation summary
 
-Addressed by the Conversation id captured at launch:
+Addressed by the Conversation id captured at launch (guardrail 2) — a Leftover report built
+from the wrong run is worse than none:
 
 ```bash
 cat ~/.aws/atx/custom/<conversation-id>/artifacts/validation_summary.md
@@ -23,13 +24,9 @@ A richer report may sit alongside it:
 ls ~/.aws/atx/custom/<conversation-id>/artifacts/
 ```
 
-> **CRITICAL: Use the Conversation id you captured from stdout.** Never `ls -t` the
-> `custom/` directory — the newest entry is not reliably this Attempt, and a Leftover report
-> built from the wrong run is worse than none.
-
-If the file is absent, do not guess. Confirm the process actually exited (`kill -0`), then
-say the summary was not produced and give the user the Attempt log path. A missing summary
-is a finding, not something to work around.
+If the file is absent, treat that as a finding rather than something to work around: confirm
+the process actually exited (`kill -0`), then report that the summary was not produced and
+give the user the Attempt log path.
 
 ## 2. Establish what actually changed
 
@@ -108,8 +105,8 @@ Tell the user:
 - How to keep it: the Disposable Clone is scratch space, so merging or pushing the Attempt
   branch somewhere durable is the user's next move
 
-Do not delete the Disposable Clone, and do not merge anything into the user's working copy
-without asking.
+Leave the Disposable Clone in place, and ask before merging anything into the user's working
+copy.
 
 ## Note on trust
 
