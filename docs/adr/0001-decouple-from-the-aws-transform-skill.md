@@ -17,3 +17,10 @@ AWS's skill remains valuable as design-time reference and is where much of this 
 knowledge came from. Because we no longer inherit its rules, its mandatory `--telemetry`
 flag becomes our choice rather than an obligation; we include it by default and document
 the opt-out.
+
+**Handoff is exempt (added in 0.1.4).** This decision bars calling AWS's skill *inside* our
+run: its gates stall an unattended loop, and its imperatives contaminate our control flow.
+Neither hazard exists when we are handing work off and stopping — there is no loop left to
+stall, and its greet-and-wait is exactly what a user beginning a fleet migration should meet.
+So `run-migration` preflight may reach it via `retrieve_skill` when declining fleet work. The
+rule is about the loop, not the skill.

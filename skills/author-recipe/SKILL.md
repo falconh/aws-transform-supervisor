@@ -16,7 +16,22 @@ your account's registry and executes. This skill writes one, tests it, and publi
 
 Read `../../CONTEXT.md` for vocabulary. Paths below are relative to this skill's directory.
 
-## Before anything: does one already exist?
+## Before anything: can `atx` do this at all?
+
+A Recipe instructs an agent that rewrites files in **one buildable git repository**. Authoring
+one for work outside that boundary produces a document that can never execute, so check the
+shape of the job before writing anything.
+
+Environment-shaped work belongs to the AWS Transform managed service, not a Recipe: migrating
+a live database's schema and data (SQL Server → Aurora), mapping and moving a VMware estate,
+decomposing a mainframe for business-rule extraction, or porting .NET Framework across many
+repos with private NuGet resolution. Say so and point at
+`/plugin install aws-transform@agent-plugins-for-aws`.
+
+The line is the unit of work, not the language — `atx` transforms .NET happily on a single
+repo. If the target is one repo you can clone and build, a Recipe is the right artifact.
+
+## Before anything else: does one already exist?
 
 ```bash
 atx custom def list --json

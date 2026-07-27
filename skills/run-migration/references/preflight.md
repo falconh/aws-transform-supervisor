@@ -19,14 +19,24 @@ Hand off when the target is an **environment** rather than a repo:
 | .NET Framework across many repos, needing private NuGet resolution | AWS Transform managed service |
 | The same transformation across many repos | AWS's own `aws-transform` skill (remote mode) |
 
-The managed service is reached through AWS's official plugin:
+Make the handoff as concrete as the destination allows.
+
+**Fleet work** (many repos, one transformation) is the one case that can be handed off
+directly rather than described: AWS's own `aws-transform` skill does remote Batch/Fargate
+orchestration, and it is reachable in-session wherever the AWS MCP tools are present — call
+`retrieve_skill` with skill name `aws-transform` and follow it from there. Handing off is not
+the same as calling it mid-loop, which ADR 0001 rules out: that rule exists because its
+greet-and-wait and per-run confirm gates break an unattended run. Here the run is ending, so
+those gates are appropriate rather than obstructive.
+
+**Environment work** cannot be handed off in-session — it needs a plugin the user may not have:
 
 ```
 /plugin install aws-transform@agent-plugins-for-aws
 ```
 
-Say plainly why, and point at the alternative — do not attempt the work here and do not offer
-to `git init` an environment. Note the one real overlap: .NET *is* transformable by `atx` on a
+Name it, say plainly why this tool is wrong for the job, and stop. Do not attempt the work
+here, and do not offer to `git init` an environment. Note the one real overlap: .NET *is* transformable by `atx` on a
 single repo (AWS's own VB6-to-Blazor and Lambda-runtime examples do exactly that). The split is
 scale, not language — one buildable repo belongs here; a cross-repo port with private packages
 and approval gates belongs to the managed service.
