@@ -2,7 +2,9 @@
 
 ## 1. Prepare the Disposable Clone
 
-Every Attempt runs in scratch space, never in the user's working copy (ADR 0005). Do this
+Every Attempt runs in scratch space, never in the user's working copy — under `-x -t` the
+`alwaysPromptCommands` deny list is not enforced, so ATX runs arbitrary shell as the user
+with their AWS credentials and nothing catches a destructive command (ADR 0005). Do this
 once per migration:
 
 ```bash

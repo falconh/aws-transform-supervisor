@@ -43,6 +43,40 @@ naming explicitly** (`/aws-transform-supervisor:run-migration`) rather than bein
 That is a real limitation, and it is the honest reading — four attempted rewrites failed to
 move it, which is evidence the cause is not description wording.
 
+## Does the skill beat no skill?
+
+A separate A/B, because trigger accuracy says nothing about whether the skill *helps* once it
+fires. Eight probes on the load-bearing facts, asked with the `run-migration` text in context
+and without it, 3 runs each.
+
+Two caveats on the numbers, both mine. The first attempt scored the with-skill arm 0/24 —
+a bug: the prompt begins with YAML frontmatter (`---`) and `claude -p` parsed it as a CLI
+flag, so every call returned empty with exit 1. Passing the prompt on stdin fixed it. The
+regex grader then produced false negatives on three probes, marking correct answers wrong for
+quoting the anti-pattern in order to warn against it (`ls -t`), or for saying "read-only"
+instead of "cannot be modified". **Treat the aggregate scores as unreliable; the per-probe
+readings below were verified by hand.**
+
+What survives that:
+
+- **The skill fixes the fact that gates everything.** Baseline named the CLI correctly 1/3;
+  with the skill, 3/3. A model that thinks the command is `aws transform …` never starts.
+- **The baseline is stronger than expected.** It already knew to wait for process exit rather
+  than the `TRANSFORMATION COMPLETE` line, that `AWS/*` definitions are read-only, the comma
+  restriction, and `validation_summary.md`. AWS Transform is in training data — the skill's
+  value is narrower than "teaches the model ATX".
+- **It found a real gap.** Asked whether `alwaysPromptCommands` still applies under `-x`, the
+  with-skill run answered: *"the `run-migration` skill doesn't cover `trust-settings.yaml` or
+  `alwaysPromptCommands` at all."* Correct — that fact lived only in ADR 0005 and the README,
+  which an executing agent never reads. Fixed in 0.1.1 by moving the reasoning into the
+  `Boundaries` section and `monitor.md`, so the Disposable Clone carries its justification
+  rather than a bare cross-reference.
+
+The honest summary: on the facts measured, the skill's demonstrated marginal value over a
+capable baseline is **narrow but load-bearing** — it wins where being wrong stops the run
+dead. Its broader value (leftover planning, branch-per-attempt, autonomy without AWS's
+confirm gates) is unmeasured, and cannot be measured without a live `atx`.
+
 ## Re-running
 
 ```bash

@@ -68,7 +68,12 @@ Deliberate, each recorded in `../../docs/adr/`.
 - Stopping a run is the user's call — report what the logs show and let them decide.
 - Attempt branches are evidence; each persists on its own branch off the Base Commit
   (ADR 0006).
-- Every Attempt runs in a Disposable Clone (ADR 0005).
+- Every Attempt runs in a Disposable Clone, because autonomous mode has no shell backstop:
+  `-t` bypasses most guardrails by AWS's own description, and the one that survives it —
+  the `alwaysPromptCommands` deny list in `~/.aws/atx/trust-settings.yaml`, covering patterns
+  like `rm -rf *` and `sudo *` — is **not enforced under `-x`**. So `-x -t` runs arbitrary
+  shell as the user, with their AWS credentials. The clone bounds the repository; it does not
+  bound the machine (ADR 0005).
 - ATX's validation summary is the verdict; this skill reports it rather than re-auditing it
   (ADR 0003).
 
