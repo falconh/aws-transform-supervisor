@@ -1,0 +1,110 @@
+---
+name: <recipe-name>
+description: <One line: what this transforms, from what state to what state.>
+---
+
+<!--
+  Starter Recipe (AWS Transform Transformation Definition).
+
+  TO USE: copy this directory, rename this file to SKILL.md, and replace every
+  <placeholder>. Delete guidance comments like this one before publishing.
+
+  Publish with:
+    atx custom def save-draft -n <name> --description "<desc>" --sd ./<this-directory>
+    atx custom def publish    -n <name> --description "<desc>" --sd ./<this-directory>
+
+  references/ holds text files only (.md, .html, .txt, source) — no PDF, PNG or DOCX —
+  and 10 MB total across all of them.
+-->
+
+# <Recipe title>
+
+## Objective
+
+Transform <source state> into <target state>.
+
+<Two or three sentences on what this migration is and why it exists. State the source and
+target explicitly — versions, libraries, frameworks — rather than saying "modernise".>
+
+## Scope
+
+**In scope:** <what this Recipe changes>
+
+**Out of scope:** <what it must not touch — be specific; this prevents unreviewable diffs>
+
+## Prerequisites
+
+- <Required runtime and version, e.g. Java 17 available on PATH>
+- <Build tool and version>
+- <Anything that must already be true of the codebase>
+
+## Phases
+
+Small, ordered, individually verifiable steps. Decompose rather than writing one large
+instruction.
+
+### Phase 1 — Analysis
+
+<Inventory what needs to change. Produce the list before changing anything.>
+
+### Phase 2 — <Build configuration / dependencies>
+
+<The mechanical, lowest-risk changes first — build files, dependency declarations.>
+
+### Phase 3 — <Source transformation>
+
+<The main body of work. Be explicit about the mapping.>
+
+IMPORTANT: <A rule that must not be violated during this phase.>
+
+### Phase 4 — Validation
+
+Run `<build command>` and resolve every error before considering the transformation done.
+
+## Transformation rules
+
+CRITICAL: <A rule that must always hold. Give the exact literal string or command — write
+`software.amazon.awssdk.services.s3.S3Client`, not "the new S3 client class".>
+
+CRITICAL: <Another non-negotiable rule.>
+
+IMPORTANT: <A strong preference that may bend if the codebase demands it.>
+
+<A mapping table is often the clearest way to express a mechanical migration:>
+
+| Old | New | Notes |
+|---|---|---|
+| `<old.api.Thing>` | `<new.api.Thing>` | <edge cases> |
+
+## Exit criteria
+
+CRITICAL: The transformation is complete only when all of the following hold.
+
+<Each criterion must be decidable by inspection or by a command — never by judgement. These
+are the entire quality mechanism: ATX validates against them and reports which went unmet,
+and that report is what the run's Leftover plan is built from. See
+../../skills/author-recipe/references/exit-criteria.md.>
+
+1. `<build command>` completes with zero errors.
+2. `<test command>` passes with no failures that were not already failing beforehand.
+3. No <old pattern> remains. Verify with: `<exact command>` — expect no matches.
+4. All <new pattern> usages follow <the intended form>.
+5. <Configuration/manifest reflects the target state, stated concretely.>
+6. NON-GOAL: do not change <the thing that must stay untouched>.
+
+## Build and validation command
+
+```
+<exact build command, e.g. mvn clean install>
+```
+
+<A deterministic command that fails loudly on a bad result. This is how ATX checks its own
+work and what feeds its Continual Learning — a Recipe without one produces markedly worse
+results.>
+
+## Reference material
+
+<List what is in references/ and when to consult it.>
+
+- `references/<migration-guide>.md` — <what it covers>
+- `references/<before-after-examples>.md` — <what it covers>
