@@ -1,7 +1,7 @@
 {
   "name": "aws-transform-supervisor",
   "description": "Run an AWS Transform (atx) migration under supervision: publish a recipe you own, watch the run, intervene only to resume or nudge, and turn ATX's unmet exit criteria into a written remediation plan.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": {
     "name": "falconh"
   },

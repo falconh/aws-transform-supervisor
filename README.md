@@ -8,19 +8,32 @@ A Claude Code + Codex plugin. Prose only — no scripts, no runtime dependencies
 
 ## Why this exists
 
-AWS already ships an official `aws-transform` agent skill that matches repositories to
-transformations, executes them locally or across a fleet, and monitors progress. **If that is
-what you need, use it** — it does that job well.
+AWS ships plenty here already. **Check these first — if one fits, use it:**
 
-This plugin deliberately owns only the two things it does not do:
+| AWS ships | Covers | Get it |
+|---|---|---|
+| `aws-transform` agent skill | Repo→transformation matching, local and fleet execution, monitoring | via the `aws-core` plugin |
+| `aws-transform` agent plugin (Claude Code + Codex) | The **managed** service: .NET, mainframe, VMware, SQL Server | `/plugin install aws-transform@agent-plugins-for-aws` |
+| `awslabs.aws-transform-mcp-server` | Managed workspaces, jobs, connectors, HITL tasks | bundled with the plugin above |
 
-- **Supervision** — watching a long-running `atx` job and reacting when it exhausts its
-  Agent Minutes budget or fails, without a human sitting on it.
-- **Leftovers** — turning the exit criteria ATX could not meet into an actionable plan.
+This plugin owns only what none of them do: **supervising one local custom transformation and
+planning its leftovers.** Watching a long-running `atx` job and reacting when it exhausts its
+Agent Minutes budget or fails, without a human sitting on it — then turning the exit criteria
+ATX could not meet into an actionable plan.
 
-It does not call AWS's skill at run time; that skill requires user confirmation before every
-execution, which is incompatible with an unattended loop. See
-[ADR 0001](docs/adr/0001-decouple-from-the-aws-transform-skill.md).
+The boundary is AWS's own: their plugin lists the `atx` CLI as a separate prerequisite "only
+required for custom transformations", which is exactly this plugin's scope. Managed-service
+migrations belong to their plugin, not an extension of this one
+([ADR 0007](docs/adr/0007-local-mode-single-application.md)).
+
+Two deliberate non-uses:
+
+- **AWS's agent skill is not called at run time** — it requires user confirmation before every
+  execution, which defeats an unattended loop
+  ([ADR 0001](docs/adr/0001-decouple-from-the-aws-transform-skill.md)).
+- **The MCP server is not used at all** — it is managed-workspace-only by its own
+  documentation, and none of its 19 tools touches a local file
+  ([ADR 0008](docs/adr/0008-drive-the-atx-cli-not-the-mcp-server.md)).
 
 ## Skills
 
