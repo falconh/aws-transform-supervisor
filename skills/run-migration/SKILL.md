@@ -36,9 +36,12 @@ These hold at every step. Each defends against a signal that looks authoritative
 
 Each step ends on its completion criterion. Move on only once it holds.
 
-1. **Preflight** — [references/preflight.md](references/preflight.md).
-   *Done when:* every check passes and the flag table has been reconciled against
-   `atx custom def exec --help`.
+1. **Preflight** — [references/preflight.md](references/preflight.md). Its step 0 decides
+   whether this is the right tool at all: `atx` transforms one buildable repo, so an
+   environment (live database, VMware estate, mainframe, cross-repo .NET port) is a handoff to
+   AWS's managed service rather than work to attempt here.
+   *Done when:* the target is confirmed to be a single local git repository, every check
+   passes, and the flag table has been reconciled against `atx custom def exec --help`.
 
 2. **Confirm the Recipe.** It must be published and declare Exit Criteria. If none exists,
    stop and hand off to `author-recipe`.

@@ -2,6 +2,35 @@
 
 Run once per session, before the first Attempt. Do not repeat per Attempt.
 
+## 0. Is this the right tool?
+
+`atx` transforms **one git repository you can clone and build locally**. Its unit of work is a
+buildable project, not an environment. Check this before anything else, because the later
+checks give actively misleading advice otherwise — a database migration reaching step 7 gets
+offered `git init`, which is nonsense for a database.
+
+Hand off when the target is an **environment** rather than a repo:
+
+| The user is migrating | Send them to |
+|---|---|
+| A live database (SQL Server → Aurora, schema + data + waves) | AWS Transform managed service |
+| A VMware estate (discovery, dependency mapping, wave planning) | AWS Transform managed service |
+| A mainframe estate (decomposition, business-rule extraction, traceability) | AWS Transform managed service |
+| .NET Framework across many repos, needing private NuGet resolution | AWS Transform managed service |
+| The same transformation across many repos | AWS's own `aws-transform` skill (remote mode) |
+
+The managed service is reached through AWS's official plugin:
+
+```
+/plugin install aws-transform@agent-plugins-for-aws
+```
+
+Say plainly why, and point at the alternative — do not attempt the work here and do not offer
+to `git init` an environment. Note the one real overlap: .NET *is* transformable by `atx` on a
+single repo (AWS's own VB6-to-Blazor and Lambda-runtime examples do exactly that). The split is
+scale, not language — one buildable repo belongs here; a cross-repo port with private packages
+and approval gates belongs to the managed service.
+
 ## 1. Platform
 
 ```bash
