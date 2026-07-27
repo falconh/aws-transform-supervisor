@@ -13,7 +13,7 @@ Hand off when the target is an **environment** rather than a repo:
 
 | The user is migrating | Send them to |
 |---|---|
-| A live database (SQL Server → Aurora, schema + data + waves) | AWS Transform managed service |
+| A live database's schema and data (SQL Server → Aurora) | AWS Transform managed service |
 | A VMware estate (discovery, dependency mapping, wave planning) | AWS Transform managed service |
 | A mainframe estate (decomposition, business-rule extraction, traceability) | AWS Transform managed service |
 | .NET Framework across many repos, needing private NuGet resolution | AWS Transform managed service |
@@ -36,10 +36,23 @@ those gates are appropriate rather than obstructive.
 ```
 
 Name it, say plainly why this tool is wrong for the job, and stop. Do not attempt the work
-here, and do not offer to `git init` an environment. Note the one real overlap: .NET *is* transformable by `atx` on a
-single repo (AWS's own VB6-to-Blazor and Lambda-runtime examples do exactly that). The split is
-scale, not language — one buildable repo belongs here; a cross-repo port with private packages
-and approval gates belongs to the managed service.
+here, and do not offer to `git init` an environment.
+
+**Split the job before handing all of it away.** These migrations decompose, and often only
+part is out of scope. .NET *is* transformable by `atx` on a single repo — AWS's own
+VB6-to-Blazor and Lambda-runtime examples do exactly that — so the split there is scale, not
+language: one buildable repo here, a cross-repo port with private packages and approval gates
+to the managed service. A database migration splits the same way. Moving schema and data is out
+of scope because it is **not idempotent**: a failed Attempt cannot be discarded the way a branch
+can (ADR 0006), and an agent under `-x -t` has no deny list and no git to recover from
+(ADR 0005). But adapting the **application code** to the new database is ordinary code
+transformation — `UseSqlServer()` → `UseNpgsql()`, `SqlConnection` → `NpgsqlConnection`,
+data-type mappings, `DbContext` configuration, T-SQL in embedded queries. AWS's managed workflow
+runs that as its own distinct step. If that is the half the user wants, it belongs here.
+
+The general rule behind all of this: work belongs here when a failed Attempt can be thrown away
+by deleting a branch. Once an Attempt's effects outlive the repository, this tool's safety model
+no longer holds, and neither should this tool.
 
 ## 1. Platform
 
