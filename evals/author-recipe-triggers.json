@@ -1,0 +1,23 @@
+[
+  {"query": "write me a transformation definition for migrating our log4j calls over to slf4j, we've got an internal LoggerFactory wrapper it needs to know about", "should_trigger": true},
+  {"query": "atx custom def list doesnt have anything that fits our internal RPC framework. how do i make my own", "should_trigger": true},
+  {"query": "how do i publish my recipe so the rest of the platform team can actually use it from their own machines", "should_trigger": true},
+  {"query": "ive drafted a transformation for the vb6 to blazor thing but the results are all over the place between runs. how do i tighten it up", "should_trigger": true},
+  {"query": "we need to move every service off our homegrown config library onto spring cloud config. can you write the atx recipe for that", "should_trigger": true},
+  {"query": "what should actually go in the references folder of a transformation definition? ive got a 40 page migration guide pdf", "should_trigger": true},
+  {"query": "my transformation keeps reporting that it finished but half the files are untouched. i think my exit criteria are just too vague", "should_trigger": true},
+  {"query": "can i tweak AWS/python-version-upgrade so it also pins our internal wheel index? or do i have to start from scratch", "should_trigger": true},
+  {"query": "im supposed to save it as a draft first before publishing right? whats the actual command for that", "should_trigger": true},
+  {"query": "i want a reusable atx transformation for our angular 14 to 17 upgrade that the other frontend teams can run themselves", "should_trigger": true},
+
+  {"query": "kicked off atx on our billing service like 40 min ago and its still going. how do i tell if its actually doing anything or just stuck", "should_trigger": false},
+  {"query": "the transformation hit its agent minutes budget and exited. how do i pick it back up without losing the work", "should_trigger": false},
+  {"query": "im writing a claude code skill for our deploy process and cant get the description right so it actually fires. any tips", "should_trigger": false},
+  {"query": "i have 40 repos that all need the same dependency upgrade, whats the bulk approach here", "should_trigger": false},
+  {"query": "write me a runbook for the payments migration so the ops team knows what to do on cutover night", "should_trigger": false},
+  {"query": "what did the transformation fail to finish on the orders service? need to know before the release call", "should_trigger": false},
+  {"query": "our sagemaker batch transform job keeps failing on the input manifest, something about a malformed s3 uri", "should_trigger": false},
+  {"query": "can you write a terraform module for our s3 buckets with the cis hardening baked in", "should_trigger": false},
+  {"query": "how much does aws transform cost per agent minute these days", "should_trigger": false},
+  {"query": "document our java upgrade process in confluence so new joiners can follow it", "should_trigger": false}
+]

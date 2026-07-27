@@ -1,0 +1,23 @@
+[
+  {"query": "kicked off atx on our billing service like 40 min ago and its still going. how do i tell if its actually doing anything or just stuck", "should_trigger": true},
+  {"query": "I've got a Recipe published called PaymentsGateway-Java17 and I want to run it against ~/work/payments-gateway. can you drive it and keep an eye on it while it goes", "should_trigger": true},
+  {"query": "the transformation just died with 'Budget limit reached: 45.00 / 45.00 Agent Minutes. Exiting.' what do i do now, do i lose the work", "should_trigger": true},
+  {"query": "run AWS/java-aws-sdk-v1-to-v2 on my orders service at /Users/han/work/orders and then tell me what it couldn't finish", "should_trigger": true},
+  {"query": "atx finished but honestly i have no idea what it actually did or whats still broken. conversation id was 20260726_101133_aa41bd2c if that helps", "should_trigger": true},
+  {"query": "can you migrate this app using aws transform? its at /Users/han/work/legacy-inventory, maven project, currently on java 8 and we want 17", "should_trigger": true},
+  {"query": "our transform run exited with code 1. do we just retry it or is something actually wrong with the setup", "should_trigger": true},
+  {"query": "i need a writeup of everything the transformation left undone so i can hand it to the team on monday standup", "should_trigger": true},
+  {"query": "supervise an atx run for me — im gonna be in meetings all afternoon and really dont want to sit there babysitting a terminal", "should_trigger": true},
+  {"query": "started a transformation on the reporting service about an hour ago, want to know when its done and whether the build actually passed at the end", "should_trigger": true},
+
+  {"query": "write me a transformation definition for migrating our log4j calls over to slf4j, we've got an internal LoggerFactory wrapper it needs to know about", "should_trigger": false},
+  {"query": "ive got about 40 microservices that all need the java 8 to 17 bump. whats the fastest way to get through all of them", "should_trigger": false},
+  {"query": "how do i publish my recipe so the rest of the platform team can actually use it from their own machines", "should_trigger": false},
+  {"query": "our mainframe COBOL migration in the AWS Transform console has been stuck on the analysis step since yesterday", "should_trigger": false},
+  {"query": "im migrating a postgres database from rds to aurora next month, whats the least downtime approach", "should_trigger": false},
+  {"query": "aws sts get-caller-identity keeps returning ExpiredToken and now i cant run anything at all", "should_trigger": false},
+  {"query": "can you review the diff on my atx/attempt-2 branch and tell me whether the SDK v2 client changes actually look correct", "should_trigger": false},
+  {"query": "we need to move our whole VMware estate onto EC2 eventually, has AWS got tooling for that or is it all manual", "should_trigger": false},
+  {"query": "what do agent minutes actually cost? trying to put a number in the budget for next quarter", "should_trigger": false},
+  {"query": "my mvn clean install is failing with NoClassDefFoundError after i bumped jackson to 2.17, any idea whats going on", "should_trigger": false}
+]
